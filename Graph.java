@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Nicole Kozuch / Section 002
  *
  *   Note, additional comments provided throughout this source code
  *   is for educational purposes
@@ -103,8 +103,29 @@ public class Graph {
    */
   
   public int findRoot() {
+    // Get the degree of each node based on incoming edges
+    int[] degrees = new int[numVertices];
+    for (int i = 0; i < numVertices; i++) {
+      for (int j : adjListArr[i]) {
+        degrees[j]++;
+      }
+    }
 
-    // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME/SECTION AT TOP OF FILE
-    return -1;
+    // Search for node with no incoming edges
+    int rootVertex = -1;
+    for (int i = 0; i < numVertices; i++) {
+      if (degrees[i] == 0) {
+        if (rootVertex != -1) {
+          return -1;
+        }
+        rootVertex = i;
+      }
+    }
+
+    if (rootVertex == -1) {
+      return -1;
+    }
+
+    return vertexValues.get(rootVertex);
   } 
 }

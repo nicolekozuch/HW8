@@ -1,6 +1,6 @@
 /******************************************************************
  *
- *   ADD YOUR NAME / SECTION NUMBER HERE
+ *   Nicole Kozuch / Section 002
  *
  *   This java file contains the problem solutions of canFinish and
  *   numGroups methods.
@@ -72,18 +72,38 @@ class ProblemSolutions {
      * @return boolean          - True if all exams can be taken, else false.
      */
 
-    public boolean canFinish(int numExams, 
-                             int[][] prerequisites) {
-      
+    public boolean canFinish(int numExams, int[][] prerequisites) {
         int numNodes = numExams;  // # of nodes in graph
-
         // Build directed graph's adjacency list
-        ArrayList<Integer>[] adj = getAdjList(numExams, 
-                                        prerequisites); 
+        ArrayList<Integer>[] adj = getAdjList(numExams, prerequisites);  
+        int[] incoming = new int[numExams];
 
-        // ADD YOUR CODE HERE - ADD YOUR NAME / SECTION AT TOP OF FILE
-        return false;
+        for (int i = 0; i < numNodes; i++) {
+            for (int j : adj[i]) {
+                incoming[j]++;
+            }
+        }
 
+        Queue<Integer> q1 = new LinkedList<>();
+        for (int i = 0; i < numNodes; i++) {
+            if (incoming[i] == 0) {
+                q1.offer(i);
+            }
+        }
+
+        int visited = 0;
+        while (!q1.isEmpty()) {
+            int node = q1.poll();
+            visited++;
+            for (int i : adj[node]) {
+                incoming[i]--;
+                if (incoming[i] == 0) {
+                    q1.offer(i);
+                }
+            }
+        }
+
+        return visited == numExams;
     }
 
 
@@ -190,9 +210,30 @@ class ProblemSolutions {
             }
         }
 
-        // YOUR CODE GOES HERE - you can add helper methods, you do not need
-        // to put all code in this method.
-        return -1;
+        boolean[] visited = new boolean[numNodes];
+        int groups = 0;
+
+        for (int n = 0; n < numNodes; n++) {
+            if (!visited[n]) {
+                dfs(n, graph, visited);
+                groups++;
+            }
+        }
+
+        return groups;
+    }
+
+
+    // Helper method for depth-first search traversal
+    private void dfs(int node, Map<Integer, List<Integer>> graph, boolean[] visited) {
+        visited[node] = true;
+        if (graph.containsKey(node)) {
+            for (int neighbor : graph.get(node)) {
+                if (!visited[neighbor]) {
+                    dfs(neighbor, graph, visited);
+                }
+            }
+        }
     }
 
 }
